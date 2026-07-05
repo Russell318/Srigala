@@ -1,0 +1,33 @@
+<div class="nav">
+  <a href="{{ url_for('index') }}">🏠 Dashboard</a>
+  <a href="{{ url_for('send_file_route') }}">📤 Kirim File</a>
+  <a href="{{ url_for('inbox_view') }}">📥 Terima &amp; Dekripsi{% if pending_count %} <span class="badge">{{ pending_count }}</span>{% endif %}</a>
+  <a href="{{ url_for('keys_view') }}">🔑 Kunci &amp; Generate</a>
+</div>
+
+<!-- Tambahan: Back link kontekstual di bawah nav -->
+{% if request.endpoint != 'index' %}
+<div style="margin: 12px 0 4px 0; padding: 8px 16px; background: #f8f9fa; border-radius: 6px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+  <a href="{{ url_for('index') }}" style="color: #4a6fa5; text-decoration: none; font-weight: 500;">← Kembali ke Dashboard</a>
+  
+  {% if request.endpoint == 'decrypt_view' %}
+    <span style="color: #666; font-size: 14px;">|</span>
+    <a href="{{ url_for('inbox_view') }}" style="color: #4a6fa5; text-decoration: none; font-weight: 500;">← Kembali ke Daftar File</a>
+  {% endif %}
+  
+  {% if request.endpoint == 'send_file_route' %}
+    <span style="color: #666; font-size: 14px;">|</span>
+    <a href="{{ url_for('index') }}" style="color: #4a6fa5; text-decoration: none; font-weight: 500;">← Kembali ke Dashboard</a>
+  {% endif %}
+  
+  {% if request.endpoint == 'keys_view' %}
+    <span style="color: #666; font-size: 14px;">|</span>
+    <a href="{{ url_for('index') }}" style="color: #4a6fa5; text-decoration: none; font-weight: 500;">← Kembali ke Dashboard</a>
+  {% endif %}
+  
+  {% if request.endpoint == 'inbox_view' %}
+    <span style="color: #666; font-size: 14px;">|</span>
+    <a href="{{ url_for('index') }}" style="color: #4a6fa5; text-decoration: none; font-weight: 500;">← Kembali ke Dashboard</a>
+  {% endif %}
+</div>
+{% endif %}

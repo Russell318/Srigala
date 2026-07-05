@@ -1,0 +1,847 @@
+/* ==========================================================
+   PQC TIM 23 - Cyber Military Theme
+   Black & Gold Edition
+========================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+h1{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 28px;
+    margin: 0;
+}
+
+.logo{
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.role-badge{
+    margin-left: 10px;
+}
+body{
+
+    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+
+    max-width:1200px;
+
+    margin:30px auto;
+
+    padding:20px;
+
+    color:#ECECEC;
+
+    background:
+    radial-gradient(circle at top,#252525 0%,#111111 35%,#050505 100%);
+
+    background-attachment:fixed;
+
+    min-height:100vh;
+
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#111;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#b58b2d;
+    border-radius:10px;
+}
+
+/* =======================================================
+TITLE
+======================================================= */
+
+h1{
+
+    text-align:center;
+
+    color:#F3D88A;
+
+    font-size:42px;
+
+    letter-spacing:6px;
+
+    margin-bottom:25px;
+
+    text-transform:uppercase;
+
+    text-shadow:
+    0 0 10px rgba(255,210,80,.35);
+
+}
+
+h1 .wolf{
+
+    font-size:.8em;
+
+}
+
+/* =======================================================
+CARD
+======================================================= */
+
+.card{
+
+    background:rgba(18,18,18,.92);
+
+    border:1px solid rgba(212,175,55,.25);
+
+    border-radius:18px;
+
+    padding:24px;
+
+    margin-bottom:25px;
+
+    backdrop-filter:blur(12px);
+
+    box-shadow:
+
+    0 0 20px rgba(212,175,55,.08),
+
+    inset 0 0 15px rgba(255,255,255,.03);
+
+}
+
+.card h3{
+
+    color:#F2D27D;
+
+    margin-bottom:15px;
+
+    letter-spacing:2px;
+
+}
+
+/* =======================================================
+NAVBAR
+======================================================= */
+
+.nav{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:16px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:30px;
+
+    padding:18px;
+
+    background:#121212;
+
+    border-radius:18px;
+
+    border:1px solid rgba(212,175,55,.25);
+
+    box-shadow:0 0 18px rgba(212,175,55,.08);
+
+}
+
+.nav a{
+
+    color:#E8C56D;
+
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.nav a:hover{
+
+    background:#D4AF37;
+
+    color:#111;
+
+    box-shadow:0 0 15px rgba(212,175,55,.45);
+
+}
+
+/* =======================================================
+BADGE
+======================================================= */
+
+.badge{
+
+    display:inline-block;
+
+    background:#d62c2c;
+
+    color:white;
+
+    border-radius:20px;
+
+    padding:3px 8px;
+
+    font-size:11px;
+
+    margin-left:6px;
+
+}
+
+/* =======================================================
+STATUS
+======================================================= */
+
+.status-online,
+.valid{
+
+    color:#39ff8a;
+
+    font-weight:bold;
+
+}
+
+.status-offline,
+.invalid{
+
+    color:#ff6363;
+
+    font-weight:bold;
+
+}
+
+.status-pending,
+.pending{
+
+    color:#FFD45A;
+
+    font-weight:bold;
+
+}
+
+/* =======================================================
+ROLE
+======================================================= */
+
+.role-badge{
+
+    display:inline-block;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    background:linear-gradient(#F6E19A,#B88A2E);
+
+    color:#111;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+/* =======================================================
+BUTTON
+======================================================= */
+
+button{
+
+    background:linear-gradient(180deg,#F4D97B,#C99B33);
+
+    color:#111;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:11px 22px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:0 0 15px rgba(212,175,55,.25);
+
+}
+
+button:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 0 25px rgba(255,220,90,.45);
+
+}
+
+button.danger{
+
+    background:linear-gradient(#ff7a7a,#b21f1f);
+
+    color:white;
+
+}
+
+/* =======================================================
+INPUT
+======================================================= */
+
+label{
+
+    display:block;
+
+    margin-top:16px;
+
+    margin-bottom:6px;
+
+    color:#F3D88A;
+
+    font-weight:600;
+
+}
+
+input[type=text],
+input[type=number],
+select,
+input[type=file]{
+
+    width:100%;
+
+    background:#161616;
+
+    color:white;
+
+    border:1px solid #444;
+
+    border-radius:8px;
+
+    padding:11px;
+
+}
+
+input:focus,
+select:focus{
+
+    outline:none;
+
+    border-color:#D4AF37;
+
+    box-shadow:0 0 10px rgba(212,175,55,.35);
+
+}
+
+/* =======================================================
+TABLE
+======================================================= */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:18px;
+
+    overflow:hidden;
+
+    border-radius:12px;
+
+}
+
+th{
+
+    background:#2D220C;
+
+    color:#F3D88A;
+
+    padding:12px;
+
+    text-align:left;
+
+}
+
+td{
+
+    padding:12px;
+
+    background:#181818;
+
+    border-bottom:1px solid #333;
+
+}
+
+tr:hover td{
+
+    background:#202020;
+
+}
+
+/* =======================================================
+LINK BOX
+======================================================= */
+
+.quick-links{
+
+    display:flex;
+
+    gap:16px;
+
+    flex-wrap:wrap;
+
+    margin-top:20px;
+
+}
+
+.quick-links a{
+
+    flex:1;
+
+    min-width:220px;
+
+    background:#151515;
+
+    border:1px solid rgba(212,175,55,.25);
+
+    color:#F3D88A;
+
+    text-decoration:none;
+
+    text-align:center;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+    font-weight:bold;
+
+}
+
+.quick-links a:hover{
+
+    background:#D4AF37;
+
+    color:#111;
+
+    transform:translateY(-3px);
+
+}
+
+.quick-links .count{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#bfbfbf;
+
+    font-size:12px;
+
+    font-weight:normal;
+
+}
+
+/* =======================================================
+PILL
+======================================================= */
+
+.pill{
+
+    display:inline-block;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    margin-right:5px;
+
+}
+
+.pill-ok{
+
+    background:#163d24;
+
+    color:#5cff9d;
+
+}
+
+.pill-fail{
+
+    background:#4d1c1c;
+
+    color:#ff8a8a;
+
+}
+
+/* =======================================================
+FLASH
+======================================================= */
+
+.flash{
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:18px;
+
+}
+
+.flash-ok{
+
+    background:#133920;
+
+    color:#5cff9d;
+
+    border:1px solid #1f7a43;
+
+}
+
+.flash-err{
+
+    background:#431919;
+
+    color:#ff9a9a;
+
+    border:1px solid #c33;
+
+}
+
+/* =======================================================
+PUBKEY
+======================================================= */
+
+.pubkey{
+
+    background:#0d0d0d;
+
+    border:1px solid #444;
+
+    color:#89ffb7;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    font-family:Consolas,monospace;
+
+    font-size:12px;
+
+    word-break:break-all;
+
+    max-height:170px;
+
+    overflow:auto;
+
+}
+
+/* =======================================================
+ROLE BOX
+======================================================= */
+
+.role-box{
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.role-box label{
+
+    color:white;
+
+}
+
+/* =======================================================
+TEXT
+======================================================= */
+
+.meta{
+
+    color:#c8c8c8;
+
+}
+
+.meta b{
+
+    color:#F3D88A;
+
+}
+
+.education{
+
+    line-height:1.8;
+
+    color:#dddddd;
+
+}
+
+.hint{
+
+    color:#AAAAAA;
+
+    font-size:13px;
+
+    margin-top:6px;
+
+}
+
+/* =======================================================
+STEP
+======================================================= */
+
+.step{
+
+    padding:16px;
+
+    margin-bottom:14px;
+
+    border-left:5px solid #555;
+
+    background:#151515;
+
+    border-radius:8px;
+
+}
+
+.step.ok{
+
+    border-left-color:#46ff93;
+
+}
+
+.step.fail{
+
+    border-left-color:#ff5555;
+
+}
+
+.step-title{
+
+    font-weight:bold;
+
+    color:#F3D88A;
+
+}
+
+.step-pillar{
+
+    display:inline-block;
+
+    margin-left:10px;
+
+    padding:4px 10px;
+
+    border-radius:20px;
+
+    background:#C89B3C;
+
+    color:#111;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+}
+
+.step-detail{
+
+    margin-top:8px;
+
+    color:#ddd;
+
+}
+
+/* =======================================================
+RESULT
+======================================================= */
+
+.result-banner{
+
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+}
+
+.result-ok{
+
+    background:#163b26;
+
+    color:#57ff97;
+
+}
+
+.result-fail{
+
+    background:#491c1c;
+
+    color:#ff8d8d;
+
+}
+
+/* =======================================================
+BACK BUTTON
+======================================================= */
+
+.back-btn{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    background:#1a1a1a;
+
+    border:1px solid rgba(212,175,55,.3);
+
+    color:#F3D88A;
+
+    transition:.3s;
+
+}
+
+.back-btn:hover{
+
+    background:#D4AF37;
+
+    color:#111;
+
+}
+
+.back-link{
+
+    color:#E8C56D;
+
+    text-decoration:none;
+
+}
+
+.back-link:hover{
+
+    text-decoration:underline;
+
+}
+
+/* =======================================================
+BREADCRUMB
+======================================================= */
+
+.breadcrumb{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    padding:12px 18px;
+
+    background:#141414;
+
+    border-radius:10px;
+
+    border:1px solid rgba(212,175,55,.2);
+
+    margin-bottom:20px;
+
+}
+
+.breadcrumb a{
+
+    color:#F3D88A;
+
+    text-decoration:none;
+
+}
+
+.breadcrumb a:hover{
+
+    text-decoration:underline;
+
+}
+
+.separator{
+
+    color:#777;
+
+}
+
+.current{
+
+    color:white;
+
+    font-weight:bold;
+
+}
+
+/* =======================================================
+RESPONSIVE
+======================================================= */
+
+@media(max-width:768px){
+
+    body{
+
+        padding:15px;
+
+    }
+
+    h1{
+
+        font-size:28px;
+
+        letter-spacing:3px;
+
+    }
+
+    .nav{
+
+        flex-direction:column;
+
+    }
+
+    .quick-links{
+
+        flex-direction:column;
+
+    }
+
+    table{
+
+        display:block;
+
+        overflow-x:auto;
+
+    }
+
+}

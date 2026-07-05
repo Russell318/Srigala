@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>{{ app_title }} — Kunci & Generate</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1><span class="wolf">🐺</span> {{ app_title }} — Kunci &amp; Generate</h1>
+{% include 'nav.html' %}
+
+<!-- Tambahan: Tombol kembali -->
+<div style="margin: 12px 0 16px 0;">
+  <a href="{{ url_for('index') }}" class="back-btn">← Kembali ke Dashboard</a>
+</div>
+
+<div class="card">
+  <h3>Kunci Identitas Saya ({{ username }})</h3>
+  <p class="meta"><b>Kurva:</b> ECC P-256 &nbsp;|&nbsp; <b>Sidik jari (fingerprint):</b>
+    <span style="font-family:monospace;">{{ own_fingerprint }}</span></p>
+  <div class="pubkey">{{ own_pubkey }}</div>
+  <p class="hint">Kunci privat TIDAK PERNAH ditampilkan di GUI ini maupun dikirim ke mana pun — tersimpan
+  hanya di berkas lokal <code>data/{{ username }}/keys/</code> pada komputer Anda.</p>
+
+  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <form method="post" action="{{ url_for('keys_regenerate') }}"
+          onsubmit="return confirm('Generate kunci identitas baru? File lama yang ditandatangani dengan kunci lama akan GAGAL verifikasi identitas setelah ini.');"
+          style="display: inline;">
+      <button type="submit" class="danger">🔑 Generate Kunci Baru</button>
+    </form>
+    <a href="{{ url_for('index') }}" class="back-btn">← Kembali tanpa perubahan</a>
+  </div>
+  <p class="hint">Fitur ini untuk belajar: coba buat ulang kunci, lalu minta teman mengirim file lagi ke Anda —
+  perhatikan bagaimana langkah "Pencocokan identitas" di halaman dekripsi tetap sah selama direktori sudah
+  ter-refresh, namun file yang DIKIRIM SEBELUM refresh akan gagal.</p>
+</div>
+
+<div class="card">
+  <h3>📚 Bagaimana 4 Pilar Keamanan Bekerja di {{ app_title }}</h3>
+  <div class="education">
+    <p><b>1. Keamanan (Kerahasiaan)</b> — Setiap pengiriman file membuat pasangan kunci ECC <i>ephemeral</i>
+    (sekali pakai). Pengirim & penerima sama-sama menjalankan ECDH dengan kunci masing-masing sehingga
+    mendapat <i>shared secret</i> yang identik tanpa pernah mengirimnya lewat jaringan. Shared secret itu
+    diregangkan dengan HKDF-SHA256 menjadi kunci AES-256, lalu file dienkripsi dengan AES-256-GCM.</p>
+
+    <p><b>2. Integritas</b> — AES-GCM punya "auth tag" bawaan: kalau ciphertext diubah walau 1 bit,
+    dekripsi akan gagal total. Sebagai lapis kedua, hash SHA-256 dari file asli juga dikirim terpisah dan
+    dicocokkan ulang setelah dekripsi.</p>
+
+    <p><b>3. Autentikasi</b> — Pengirim menandatangani hash file dengan kunci PRIVAT identitasnya (ECDSA).
+    Penerima memverifikasi tanda tangan itu memakai kunci PUBLIK pengirim yang tercatat di direktori
+    server relay saat registrasi.</p>
+
+    <p><b>4. Non-Repudiasi</b> — Karena tanda tangan ECDSA hanya bisa dibuat oleh pemegang kunci privat,
+    dan kunci publik yang dipakai untuk verifikasi dicocokkan dengan direktori server (bukan sekadar dari
+    paket itu sendiri), pengirim tidak bisa menyangkal telah mengirim file tersebut — kecuali kunci
+    privatnya bocor.</p>
+
+    <p class="hint">Catatan: server relay (mode HOST) hanya meneruskan paket terenkripsi dan menyimpan
+    daftar kunci publik. Server tidak pernah melihat isi file asli maupun kunci AES.</p>
+  </div>
+</div>
+
+</body>
+</html>

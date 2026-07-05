@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>{{ app_title }} — {{ username }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+
+<h1>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+    {{ app_title }} &mdash; {{ username }}
+    <span class="role-badge">
+        {{ 'HOST (SERVER)' if role == 'host' else 'CLIENT' }}
+    </span>
+</h1>
+
+{% include 'nav.html' %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash {{ 'flash-ok' if category=='ok' else 'flash-err' }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+<div class="card">
+  <b>Status koneksi ke server relay:</b>
+  {% if connected %}<span class="status-online">Terhubung</span>{% else %}<span class="status-offline">Terputus</span>{% endif %}
+  &nbsp;({{ server_host }}:{{ server_port }})
+  &nbsp;|&nbsp; <b>Peer online:</b>
+  {% for u in directory if u != username %}{{ u }}{{ ", " if not loop.last else "" }}{% else %}(tidak ada){% endfor %}
+  &nbsp;
+  <form method="post" action="{{ url_for('refresh') }}" style="display:inline;">
+    <button type="submit">🔄 Refresh direktori</button>
+  </form>
+
+  {% if role == 'host' %}
+    <div style="margin-top:8px; font-size:13px; color:#555;">
+      Bagikan alamat ini ke teman yang ingin konek sebagai CLIENT: <b>{{ own_ip }}:{{ server_port }}</b>
+    </div>
+  {% endif %}
+
+  {% if not connected %}
+    <div class="flash flash-err" style="margin-top:12px;">
+      ⚠️ Belum terhubung ke server relay di <b>{{ server_host }}:{{ server_port }}</b>. Baik peran HOST maupun
+      CLIENT tetap butuh koneksi ini supaya bisa saling kirim/terima — cek: (1) apakah komputer yang jadi
+      <b>HOST</b> sudah dijalankan &amp; server relay-nya aktif, (2) apakah alamat IP &amp; port di atas sudah
+      benar dan bisa dijangkau (satu jaringan / firewall tidak memblokir), lalu klik "Refresh direktori" lagi.
+    </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <p class="hint" style="margin-top:0;">
+    Peran <b>{{ 'HOST' if role == 'host' else 'CLIENT' }}</b> tidak membatasi arah pengiriman — begitu Anda
+    dan peer sama-sama online, keduanya bisa saling <b>mengirim</b> maupun <b>menerima</b> file terenkripsi.
+  </p>
+  <div class="quick-links">
+    <a href="{{ url_for('send_file_route') }}">📤 Kirim File<span class="count">Enkripsi &amp; kirim ke peer online</span></a>
+    <a href="{{ url_for('inbox_view') }}">📥 Terima &amp; Dekripsi<span class="count">{{ pending_count }} menunggu dekripsi</span></a>
+    <a href="{{ url_for('keys_view') }}">🔑 Kunci &amp; Generate<span class="count">Lihat/ganti kunci identitas</span></a>
+  </div>
+</div>
+
+<div class="card">
+  <h3>📤 Riwayat Terkirim (ringkas)</h3>
+  <table>
+    <tr><th>Waktu</th><th>Ke</th><th>File</th><th>Ukuran</th><th>Hash SHA-256</th></tr>
+    {% for s in sent_log[:5] %}
+    <tr>
+      <td>{{ s.time }}</td><td>{{ s.target }}</td><td>{{ s.filename }}</td>
+      <td>{{ s.size }} bytes</td><td style="font-family:monospace; font-size:11px;">{{ s.file_hash[:16] }}...</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">Belum ada file terkirim.</td></tr>
+    {% endfor %}
+  </table>
+  {% if sent_log|length > 5 %}<p class="hint">Menampilkan 5 terbaru dari {{ sent_log|length }} riwayat.</p>{% endif %}
+</div>
+
+<div class="card">
+  <h3>📥 File Diterima (ringkas)</h3>
+  <table>
+    <tr><th>Waktu</th><th>Dari</th><th>File</th><th>Status</th></tr>
+    {% for r in received_log[:5] %}
+    <tr>
+      <td>{{ r.time }}</td><td>{{ r.sender }}</td><td>{{ r.filename }}</td>
+      <td>
+        {% if r.status == 'pending' %}<span class="pending">⏳ Menunggu Dekripsi</span>
+        {% elif r.status == 'valid' %}<span class="valid">✅ SAH</span>
+        {% else %}<span class="invalid">❌ Gagal</span>{% endif %}
+        &nbsp;<a href="{{ url_for('decrypt_view', entry_id=r.id) }}">lihat</a>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">Belum ada file diterima.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="hint">Lihat semua &amp; jalankan proses dekripsi di halaman <a href="{{ url_for('inbox_view') }}">Terima &amp; Dekripsi</a>.</p>
+</div>
+
+</body>
+</html>

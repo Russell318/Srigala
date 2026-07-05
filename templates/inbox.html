@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>{{ app_title }} — Terima &amp; Dekripsi</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1><span class="wolf">🐺</span> {{ app_title }} — Terima &amp; Dekripsi</h1>
+{% include 'nav.html' %}
+
+<!-- Tambahan: Tombol kembali -->
+<div style="margin: 12px 0 16px 0;">
+  <a href="{{ url_for('index') }}" class="back-btn">← Kembali ke Dashboard</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash {{ 'flash-ok' if category=='ok' else 'flash-err' }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+<div class="card">
+  <b>Status koneksi:</b>
+  {% if connected %}<span class="status-online">Terhubung</span>{% else %}<span class="status-offline">Terputus</span>{% endif %}
+  &nbsp;|&nbsp; <b>Peer online:</b>
+  {% for u in directory if u != username %}{{ u }}{{ ", " if not loop.last else "" }}{% else %}(tidak ada){% endfor %}
+  &nbsp;
+  <form method="post" action="{{ url_for('refresh') }}" style="display:inline;">
+    <button type="submit">🔄 Refresh direktori</button>
+  </form>
+</div>
+
+<div class="card">
+  <h3>📥 File Diterima</h3>
+  <p class="hint">File baru masuk dalam keadaan <b>terenkripsi</b> ("Menunggu Dekripsi"). Klik "Lihat &amp;
+  Dekripsi" untuk menjalankan proses dekripsi + verifikasi 5-langkah secara interaktif.</p>
+  <table>
+    <tr><th>Waktu</th><th>Dari</th><th>File</th><th>Status</th><th>Aksi</th></tr>
+    {% for r in received_log %}
+    <tr>
+      <td>{{ r.time }}</td>
+      <td>{{ r.sender }}</td>
+      <td>{{ r.filename }}</td>
+      <td>
+        {% if r.status == 'pending' %}
+          <span class="pending">⏳ Menunggu Dekripsi (masih terenkripsi)</span>
+        {% elif r.status == 'valid' %}
+          <span class="valid">✅ SAH &amp; Terverifikasi</span><br>
+          <span class="pill pill-ok">Kerahasiaan OK</span>
+          <span class="pill pill-ok">Integritas OK</span>
+          <span class="pill pill-ok">Autentikasi OK</span>
+          <span class="pill pill-ok">Non-Repudiasi OK</span>
+        {% else %}
+          <span class="invalid">❌ GAGAL / DITOLAK</span>
+          {% for s in r.steps if not s.ok %}
+            <br><span class="pill pill-fail">{{ s.name }}</span>
+          {% endfor %}
+        {% endif %}
+      </td>
+      <td>
+        {% if r.status == 'pending' %}
+          <a href="{{ url_for('decrypt_view', entry_id=r.id) }}">🔓 Lihat &amp; Dekripsi</a>
+        {% elif r.status == 'valid' %}
+          <a href="{{ url_for('decrypt_view', entry_id=r.id) }}">Lihat proses</a> |
+          <a href="{{ url_for('download', entry_id=r.id) }}">Unduh</a>
+        {% else %}
+          <a href="{{ url_for('decrypt_view', entry_id=r.id) }}">Lihat detail kegagalan</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">Belum ada file diterima. Minta peer mengirim file lewat halaman "Kirim File" mereka.</td></tr>
+    {% endfor %}
+  </table>
+  <div style="margin-top: 16px;">
+    <a href="{{ url_for('index') }}" class="back-btn">← Kembali ke Dashboard</a>
+  </div>
+</div>
+
+</body>
+</html>

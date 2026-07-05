@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>{{ app_title }} — Dekripsi File</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1><span class="wolf">🐺</span> {{ app_title }} — Dekripsi &amp; Verifikasi</h1>
+{% include 'nav.html' %}
+
+<!-- Tambahan: Tombol kembali kontekstual -->
+<div style="margin: 12px 0 16px 0; display: flex; gap: 12px; flex-wrap: wrap;">
+  <a href="{{ url_for('inbox_view') }}" class="back-btn">← Kembali ke Daftar File</a>
+  <a href="{{ url_for('index') }}" class="back-btn" style="background: #e9ecef;">← Kembali ke Dashboard</a>
+</div>
+
+<div class="card">
+  <h3>📦 Paket Diterima (Terenkripsi)</h3>
+  <p class="meta">
+    <b>Dari:</b> {{ entry.sender }}<br>
+    <b>Nama file:</b> {{ entry.filename }}<br>
+    <b>Waktu diterima:</b> {{ entry.time }}<br>
+    <b>Nonce (AES-GCM):</b> <span style="font-family:monospace;">{{ package.nonce[:24] }}...</span><br>
+    <b>Ciphertext:</b> <span style="font-family:monospace;">{{ package.ciphertext[:32] }}... ({{ package.ciphertext|length }} karakter base64)</span><br>
+    <b>Hash SHA-256 yang diklaim pengirim:</b> <span style="font-family:monospace;">{{ package.file_hash }}</span><br>
+    <b>Tanda tangan ECDSA:</b> <span style="font-family:monospace;">{{ package.signature[:32] }}...</span>
+  </p>
+
+  {% if entry.status == 'pending' %}
+    <p>Data di atas masih berupa <b>ciphertext</b> — belum bisa dibaca isinya. Tekan tombol di bawah untuk
+    menjalankan proses dekripsi &amp; verifikasi 5 langkah (ECDH → AES-GCM → hash → tanda tangan → identitas).</p>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <form method="post" action="{{ url_for('decrypt_view', entry_id=entry.id) }}" style="display: inline;">
+        <button type="submit">🔓 Mulai Proses Dekripsi & Verifikasi</button>
+      </form>
+      <a href="{{ url_for('inbox_view') }}" class="back-btn">← Kembali Tanpa Mendekripsi</a>
+    </div>
+  {% endif %}
+</div>
+
+{% if entry.status != 'pending' %}
+<div class="card">
+  <h3>🔬 Hasil Proses (langkah demi langkah)</h3>
+  {% for s in entry.steps %}
+    <div class="step {{ 'ok' if s.ok else 'fail' }}">
+      <span class="step-title">{{ loop.index }}. {{ s.name }}</span>
+      <span class="step-pillar">{{ s.pillar }}</span>
+      {% if s.ok %}<span class="valid"> ✅</span>{% else %}<span class="invalid"> ❌</span>{% endif %}
+      <div class="step-detail">{{ s.detail }}</div>
+    </div>
+  {% endfor %}
+
+  {% if entry.status == 'valid' %}
+    <div class="result-banner result-ok">
+      ✅ File SAH & TERVERIFIKASI — semua 4 pilar keamanan terpenuhi.
+      <div style="margin-top:8px;">
+        <a href="{{ url_for('download', entry_id=entry.id) }}">⬇️ Unduh file asli</a>
+        <span style="margin: 0 8px; color: #ccc;">|</span>
+        <a href="{{ url_for('inbox_view') }}">← Kembali ke Daftar File</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="result-banner result-fail">
+      ❌ File DITOLAK — salah satu pilar keamanan gagal terpenuhi (lihat langkah bertanda ❌ di atas).
+      File tidak disimpan dan tidak bisa diunduh.
+      <div style="margin-top:8px;">
+        <a href="{{ url_for('inbox_view') }}">← Kembali ke Daftar File</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+</body>
+</html>
