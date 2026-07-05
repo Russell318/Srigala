@@ -1,11 +1,6 @@
 # 🐺 SRIGALA — Secure File Transfer (Kode Terpisah + Dekripsi Interaktif)
 
-Versi ini adalah pengembangan dari `secure_file_transfer.py` (satu file),
-dengan tiga perubahan utama sesuai permintaan:
 
-1. **Judul web diganti menjadi "SRIGALA"**.
-2. **Dekripsi kini interaktif**, bukan otomatis — supaya prosesnya bisa dipelajari.
-3. **Kode Python dan HTML dipisah** ke berkas masing-masing.
 
 ## 1. Struktur Berkas
 
